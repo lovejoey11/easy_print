@@ -1,0 +1,10 @@
+{
+  "name": "easy-print",
+  "version": "0.0.0",
+  "public": "true",
+  "dependencies": {
+    "date-time": "^2.1.0",
+    "thirty-two": "^1.0.2",
+    "unixtime": "0.0.2"
+  }
+}
