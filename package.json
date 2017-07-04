@@ -2,6 +2,10 @@
   "name": "easy-print",
   "version": "0.0.0",
   "public": "true",
+  "scripts": {
+  "once": "node src/totp.js"
+},
+
   "dependencies": {
     "date-time": "^2.1.0",
     "thirty-two": "^1.0.2",
