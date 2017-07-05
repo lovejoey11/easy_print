@@ -1,19 +1,19 @@
 'use strict';
 
-const base32 = require('../node_modules/thirty-two');
-const unixtime = require('../node_modules/unixtime');
-const dateTime = require('../node_modules/date-time');
+const base32 = require('thirty-two');
+const unixtime = require('unixtime');
+const dateTime = require('date-time');
 let crypto = require('crypto');
 let fs = require('fs');
 
 let userid;
 let user;
 let key;
-user = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+user = JSON.parse(fs.readFileSync('user.info', 'utf8'));
 
 if (user.key === undefined || user.key === null || user.key ===''){
   key = generateSecretASCII(20)
-} else{
+} else {
   key = user.key;
 }
 console.log('Your Secret Key is: ' + user.secrete_key);
@@ -24,7 +24,6 @@ let SecretKey = {
   hex: Buffer(key, 'ascii').toString('hex'),
   base32: base32.encode(Buffer(key)).toString().replace(/=/g, '')
 }
-// console.log(SecretKey);
 
 // Get time stamp
 let tstep = 30
@@ -53,12 +52,12 @@ function hexstring2Bytes(hexstring){
 //encrypt process
 let hash = crypto.createHmac(SecretKey.algorithm, key_bytes_buff)
       .update(time_bytes_buff).digest('hex');
-// console.log("The encrypted hash code is: " + hash);
-// console.log(hash.length);
 let grpd_hash = [];
+
 for (let i = 0; i < hash.length; i = i + 2){
-  grpd_hash.push(hash[i] + hash[i + 1]);}
-// console.log(grpd_hash, "\n", grpd_hash.length);
+  grpd_hash.push(hash[i] + hash[i + 1]);
+  }
+
 offest = (new Buffer(grpd_hash[grpd_hash.length-1],'hex')[0]) & 0xf;
 let binary = (((new Buffer(grpd_hash[offest],'hex')[0]) & 0x7f) << 24) |
              (((new Buffer(grpd_hash[offest + 1],'hex')[0]) & 0xff) << 16) |
@@ -69,7 +68,6 @@ let result = opt.toString();
 while(result.length < 6){
   result = '0' + result;
 }
-// console.log(result);
 
 //Save code to file
 let content = {
@@ -82,8 +80,12 @@ let content = {
 }
 fs.writeFile('data.json', JSON.stringify(content, null, 2) + '\n', function (err) {
   if (err) throw err;
-  console.log('File Updated!');
-})
+  console.log('Key Updated!');
+});
+fs.appendFile('key.log', JSON.stringify(content, null, 2) + '\n', function (err) {
+  if (err) throw err;
+  console.log('Log Updated!');
+});
 
 /**
  * Generates a random secret with the set A-Z a-z 0-9 and symbols, of any length
