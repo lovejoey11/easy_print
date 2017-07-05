@@ -18,6 +18,7 @@ if (user.key === undefined || user.key === null || user.key ===''){
 }
 console.log('Your Secret Key is: ' + user.secrete_key);
 console.log('Please add it to your authenticator');
+
 let SecretKey = {
   algorithm: 'sha1',
   ascii: key,
